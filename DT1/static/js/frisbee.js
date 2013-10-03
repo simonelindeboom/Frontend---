@@ -1,4 +1,4 @@
-//Global scope met name space
+//Global scope met namespace, maak frisbee object aan (of maak leegobject met naam frisbee)
 var FRISBEE = FRISBEE || {};
 
 //anonymous function
@@ -72,7 +72,7 @@ var FRISBEE = FRISBEE || {};
 	};
 	
 
-	// Controller Init, wordt uitgevoerd wanneer domgeladen is..?
+	// Controller wordt uitgevoerd als dom geladen is
 	FRISBEE.beginning = 
 	{	
 		init: function () 
@@ -84,7 +84,7 @@ var FRISBEE = FRISBEE || {};
 	};
 
 
-	// router
+	// router library 
 	FRISBEE.router = 
 	{
 	init: function(){
@@ -92,28 +92,28 @@ var FRISBEE = FRISBEE || {};
 		routie(
 			{
 				'/rankingpage':function (){
-					console.log('router loadRankingPage');
+					console.log('loadRankingPage');
 					FRISBEE.page.loadRankingPage();
 				},
 				'/schedulepage':function (){
 					FRISBEE.page.loadSchedulePage();
-					console.log('router loadSchedulePage');
+					console.log('loadSchedulePage');
 				},
 				'/gamepage':function (){
 					FRISBEE.page.loadGamePage();
-					console.log('router loadGamePage');
+					console.log('loadGamePage');
 				},
 				'*':function (){
 					FRISBEE.page.loadRankingPage();
-					console.log('router loadRankingPage');
+					console.log('loadRankingPage');
 				}
 			});
 		},
 		
-		// controle welke pagina is geladen in url en welke active moet zijn
+		// controle welke pagina is geladen in url en welke content active moet zijn
 		changePage: function() 
 		{
-			console.log("change");
+			console.log("changePage");
 			var route = window.location.hash.slice(2),
 			sections = qwery('section[data-route]'),
 			section = qwery('[data-route=' + route + ']')[0];
@@ -127,7 +127,7 @@ var FRISBEE = FRISBEE || {};
 	        	section.classList.add('active');
 	        }
 
-        	// Default route
+        	// Standaard route met zichtbare content van eerste in array
 	    	if (!route) 
 	        {
 	        	sections[0].classList.add('active');
@@ -137,12 +137,11 @@ var FRISBEE = FRISBEE || {};
 	};
 
 
-	// pagina's
+	// html en data koppelen met behulp van qwery
 	FRISBEE.page = 
 	{
 		loadRankingPage: function () {
 			console.log('router Transparency');
-			console.log(qwery('[data-route=rankingpage]')[0]);
 			Transparency.render(qwery('[data-route=rankingpage]')[0], FRISBEE.rankingpage);
 			FRISBEE.router.changePage();
 		},
