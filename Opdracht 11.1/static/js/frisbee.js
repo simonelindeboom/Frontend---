@@ -1,4 +1,4 @@
-//Global scope met namespace, maak frisbee object aan (of maak leegobject met naam frisbee)
+//Global scope met name space
 var FRISBEE = FRISBEE || {};
 
 //anonymous function
@@ -70,53 +70,59 @@ var FRISBEE = FRISBEE || {};
 		    { score: "23", team1: "Boomsquad", team1Score: "15", team2: "Burning Snow", team2Score: "8"}
 		]
 	};
-	
 
-	// Controller wordt uitgevoerd als dom geladen is
+qwest.get('https://www.dennistel.nl/movies')
+     .success(function(response){
+        alert(response);
+     });
+
+
+	// Controller Init, wordt uitgevoerd wanneer domgeladen is..?
 	FRISBEE.beginning = 
 	{	
 		init: function () 
 		{
-			console.log("step 2");
 			console.log('beginning');
 			// pull data: ranking, game, schedule
 			FRISBEE.router.init();
-		},
+		}
 	};
 
 
-	// router library 
+	// router
 	FRISBEE.router = 
 	{
-	init: function(){
-		console.log("step 3");
-		console.log('router init')
-		routie(
+		init: function()
+		{
+			console.log('router init')
+			routie(
 			{
 				'/rankingpage':function (){
-					console.log('loadRankingPage');
+					console.log('router loadRankingPage');
 					FRISBEE.page.loadRankingPage();
 				},
 				'/schedulepage':function (){
 					FRISBEE.page.loadSchedulePage();
-					console.log('loadSchedulePage');
+					console.log('router loadSchedulePage');
 				},
 				'/gamepage':function (){
 					FRISBEE.page.loadGamePage();
-					console.log('loadGamePage');
+					console.log('router loadGamePage');
+				},
+				'/moviepage':function (){
+					FRISBEE.page.loadMoviePage();
 				},
 				'*':function (){
 					FRISBEE.page.loadRankingPage();
-					console.log('loadRankingPage');
+					console.log('router loadRankingPage');
 				}
 			});
 		},
 		
-		// controle welke pagina is geladen in url en welke content active moet zijn
+		// controle welke pagina is geladen in url en welke active moet zijn
 		changePage: function() 
 		{
-			console.log("changePage");
-			console.log("step 6");
+			console.log("change");
 			var route = window.location.hash.slice(2),
 			sections = qwery('section[data-route]'),
 			section = qwery('[data-route=' + route + ']')[0];
@@ -130,7 +136,7 @@ var FRISBEE = FRISBEE || {};
 	        	section.classList.add('active');
 	        }
 
-        	// Standaard route met zichtbare content van eerste in array
+        	// Default route
 	    	if (!route) 
 	        {
 	        	sections[0].classList.add('active');
@@ -140,24 +146,31 @@ var FRISBEE = FRISBEE || {};
 	};
 
 
-	// html en data koppelen met behulp van qwery
+	// pagina's
 	FRISBEE.page = 
 	{
 		loadRankingPage: function () {
-			console.log("step 4");
-			console.log('router Transparency');
-			console.log("step 5");
+			console.log('Transparency');
+			console.log(qwery('[data-route=rankingpage]')[0]);
 			Transparency.render(qwery('[data-route=rankingpage]')[0], FRISBEE.rankingpage);
 			FRISBEE.router.changePage();
 		},
 		loadSchedulePage: function () {
-			console.log("step 4");
 			Transparency.render(qwery('[data-route=schedulepage]')[0], FRISBEE.schedulepage);
 			FRISBEE.router.changePage();
 		},
 		loadGamePage: function () {
-			console.log("step 4");
 			Transparency.render(qwery('[data-route=gamepage]')[0], FRISBEE.gamepage);
+			FRISBEE.router.changePage();
+		},
+		loadMoviePage: function () {
+			qwest.get('http://www.dennistel.nl/movies', {type: "json"} )
+		     .success(function(response){
+		        console.log(response);
+		        data = JSON.parse(response)
+		        Transparency.render(qwery('[data-route=moviepage]')[0], data);
+		     });
+			
 			FRISBEE.router.changePage();
 		}
 	}
@@ -165,7 +178,6 @@ var FRISBEE = FRISBEE || {};
 	domready(function ()
 	{	
 		console.log("dom is klaar");
-		console.log("step 1");
 		// Kickstart de applicatie wanneer alles geladen is = uitvoeren
 		FRISBEE.beginning.init();
 	});
