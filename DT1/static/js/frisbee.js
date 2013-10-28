@@ -1,3 +1,5 @@
+// HAHAHAHAHAHAHAHAHAHA LOL
+
 //Global scope met namespace, maak frisbee object aan (of maak leegobject met naam frisbee)
 var FRISBEE = FRISBEE || {};
 
