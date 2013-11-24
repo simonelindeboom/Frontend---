@@ -29,7 +29,8 @@ var FRISBEE = FRISBEE || {};
 			var element = qwery('#refresh')[0];
     		
     		var hammertime = Hammer(element).on('tap', function(event) 
-    		{
+    		{	
+    			FRISBEE.data.loader.classList.remove('hidden');
         		FRISBEE.leaguevineRouter.getTournamentData();
 				FRISBEE.leaguevineRouter.getRankingData();
     		});
@@ -76,7 +77,7 @@ var FRISBEE = FRISBEE || {};
 			var xhr = new XMLHttpRequest();
 			// open connectie met leaguevine api
 			xhr.open('POST','https://api.leaguevine.com/v1/game_scores/', true);
-			// geef aan dat het een JSON is
+			// geef aan dat het een JSON object is
 			xhr.setRequestHeader('Content-type','application/json');
 			// authenticeer bij leaguevine
 			xhr.setRequestHeader('Authorization','bearer 82996312dc');
@@ -145,12 +146,12 @@ var FRISBEE = FRISBEE || {};
 			var route = window.location.hash.slice(2);
 			sections = qwery('section[data-route]');
 
-			console.log(.SUBSTRINGING: '' + route.substring(0,9));
+			console.log('substring: ' + route.substring(0,9));
 			
 			if (route.substring(0,9) == 'scorepage')
 			{
 				route = 'scorepage';
-				console.log('ROUTE ROUTE ROUTING: ' + route);
+				console.log('alternate route routing: ' + route);
 			}			
 
 			section = qwery('[data-route=' + route + ']')[0];
@@ -218,7 +219,7 @@ var FRISBEE = FRISBEE || {};
 	        	}
 	        }
 
-			// Zoek in html naar class submitScore en hang eventlistner eraan
+			// Zoek in html naar class submitScore en hang er een eventlistner aan
 	        var button = qwery('.submitScore')[0];
             button.addEventListener('click', function() 
             {

@@ -8,8 +8,8 @@
 </head>
 <body>
 	<header>
-		<img id="refresh" src="media/images/skeleton.png" alt="Web App Skeleton" data-source="http://www.gettyicons.com/free-icon/119/halloween-icon-set/free-skull-icon-png/">
-		<h1>Web App Skeleton</h1>
+		<img id="refresh" src="media/images/leaguevinelogo.png" alt="Leaguevine logo" data-source="https://d2vrmkp7lb6jlo.cloudfront.net/v2/img/favicon_big.png/">
+		<h1>Autumn 2013</h1>
 		<nav>
 			<ul>
 				<li><a href="#/schedulepage">Schedule</a></li>
@@ -20,17 +20,15 @@
 	</header>
 
 	<article id="content" class="col">
-		<section data-route="schedulepage">
+		<section data-route="schedulepage" class="row">
 			<!-- content -->
 			<table>
 				<tbody data-bind="objects">
 	                <tr>
 	                    <td data-bind="start_time"></td>
-	           			<td data-bind="team_1">
-	                    <span data-bind="name"></span></td>
-	                   	<td data-bind="team_2">
-                   		<span data-bind="name"></span>
-	                   	</td>	
+	           			<td data-bind="team_1"><span data-bind="name"></span></td>
+	           			<td> - </td>
+	                   	<td data-bind="team_2"><span data-bind="name"></span></td>	
 	                </tr>
 	            </tbody>
 	        </table>
@@ -42,9 +40,8 @@
 				<tbody data-bind="objects">
 					<tr>
 						<td data-bind="team_1"><span data-bind="name"></span></td>
-						<td data-bind="team_1_score"></td>
+						<td><span data-bind="team_1_score"></span> - <span data-bind="team_2_score"></span></td>
 						<td data-bind="team_2"><span data-bind="name"></span></td>
-						<td data-bind="team_2_score"></td>
 						<td><a class="editScore" href="">edit</a></td>
 					</tr>
 				</tbody>
@@ -84,10 +81,16 @@
 		<section data-route="rankingpage" class="active">
 			<!-- content -->
 			<table>
+				<thead>
+					<td>Team</td>
+			            <td>Wins</td>
+			            <td>Losses</td>
+			            <td>Allowed</td>
+			            <td>Scored</td>
+				</thead>
 				<tbody data-bind="objects">
 					<tr>
-						<td data-bind="team">
-		                <span data-bind="name"></span></td>
+						<td data-bind="team"><span data-bind="name"></span></td>
 			            <td data-bind="wins"></td>
 			            <td data-bind="losses"></td>
 			            <td data-bind="points_allowed"></td>
