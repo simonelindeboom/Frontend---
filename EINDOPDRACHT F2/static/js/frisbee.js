@@ -13,7 +13,7 @@ var FRISBEE = FRISBEE || {};
 	},
 
 
-	// Controller Init, wordt uitgevoerd wanneer domgeladen is
+	// Controller Init, wordt uitgevoerd wanneer dom geladen is
 	FRISBEE.beginning = 
 	{	
 		init: function () 
@@ -25,6 +25,14 @@ var FRISBEE = FRISBEE || {};
 			// pull data: ranking, game, schedule
 			FRISBEE.leaguevineRouter.getTournamentData();
 			FRISBEE.leaguevineRouter.getRankingData();
+
+			var element = qwery('#refresh')[0];
+    		
+    		var hammertime = Hammer(element).on('tap', function(event) 
+    		{
+        		FRISBEE.leaguevineRouter.getTournamentData();
+				FRISBEE.leaguevineRouter.getRankingData();
+    		});
 		}
 	},
 
@@ -41,7 +49,7 @@ var FRISBEE = FRISBEE || {};
 		       FRISBEE.router.init();
 		    });
 		},
-		// hier begin ik weer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 		getRankingData: function()
 		{
 			qwest.get('https://api.leaguevine.com/v1/stats/ultimate/team_stats_per_tournament/?tournament_ids=%5B19389%5D&limit=200&access_token=8051a725ac').success(function(response)
@@ -53,37 +61,38 @@ var FRISBEE = FRISBEE || {};
 		    });
 		},
 
-		// Haal data uit formulier op
+		// Haal data uit formulier op en post deze data met gegeven game ID
 		postScoreData: function(id)
         {	
-        	//zoek waarde formulierveld op met behulp van id en stop in variabele
-        	var score1 = qwery("#scoreField1")[0].value;
-            var score2 = qwery("#scoreField2")[0].value;
+        	// Zoek waarde formulierveld op met behulp van id en stop in variabele
+        	var score1 = qwery('#scoreField1')[0].value;
+            var score2 = qwery('#scoreField2')[0].value;
 
             // Zet de te versturen data om in een JSON object zodat Leaguevine data kan verwerken
-			var queryData = { game_id: id, team_1_score: score1, team_2_score: score2, is_final: true };
-			var queryData = JSON.stringify(queryData);
+			var formData = { game_id: id, team_1_score: score1, team_2_score: score2, is_final: true };
+			var formData = JSON.stringify(formData);
 
 			// Maak een XMLHttpRequest object aan om de data te versturen naar Leaguevine
 			var xhr = new XMLHttpRequest();
-			xhr.open("POST","https://api.leaguevine.com/v1/game_scores/", true);
+			// open connectie met leaguevine api
+			xhr.open('POST','https://api.leaguevine.com/v1/game_scores/', true);
+			// geef aan dat het een JSON is
 			xhr.setRequestHeader('Content-type','application/json');
+			// authenticeer bij leaguevine
 			xhr.setRequestHeader('Authorization','bearer 82996312dc');
-			xhr.send(queryData);
+			xhr.send(formData);
 
-			// Controleer wat de response van het xhr object is
+			// Controleer wat de response van het xhr object is van Leaguevine api
 			xhr.onreadystatechange = function()
 			{
-				// Als de readyState gelijk is aan 4 dan is het versturen gelukt
+				// Als de readyState gelijk is aan 4(=goed) dan is het versturen gelukt
 				if(xhr.readyState == 4)
 				{
-					// Wanneer het versturen gelukt is, geef de games pagina weer
-			        // DIT MOET JE ZELF DOEN    ??
+					// Wanneer het versturen gelukt is, herlaad data
 			        FRISBEE.leaguevineRouter.getTournamentData();
 					FRISBEE.leaguevineRouter.getRankingData();
-
+					// Geef de gamepage weer in url balk
 					window.location = 'index.html#/gamepage';
-			        // FRISBEE.page.loadGamepage();
 				};
 			}
 		}
@@ -97,27 +106,34 @@ var FRISBEE = FRISBEE || {};
 			console.log('router init')
 			routie(
 			{
-				'/schedulepage':function (){
+				'/schedulepage':function ()
+				{
 					console.log('router loadSchedulePage');
 					FRISBEE.page.loadSchedulePage();
 				},
-				'/gamepage':function (){
+				
+				'/gamepage':function ()
+				{
 					console.log('router loadGamePage');
 					FRISBEE.page.loadGamePage();
 				},
 
-				//scorepage pagina herkennen????????????????????????????????????????????
-				'/scorepage/:id':function (id){
+				'/scorepage/:id':function (id)
+				{
 					console.log('router loadScorePage'+ id);
 					FRISBEE.page.loadScorePage(id);
 				},
-				'/rankingpage':function (){
+
+				'/rankingpage':function ()
+				{
 					console.log('router loadRankingPage');
 					FRISBEE.page.loadRankingPage();
 				},
-				'*':function (){
-				console.log('router * loadSchedulePage');
-				FRISBEE.page.loadSchedulePage();
+
+				'*':function ()
+				{
+					console.log('router * loadSchedulePage');
+					FRISBEE.page.loadSchedulePage();
 				}
 			});
 		},
@@ -125,15 +141,16 @@ var FRISBEE = FRISBEE || {};
 		// controle welke pagina is geladen in url en welke active moet zijn
 		changePage: function() 
 		{
-			console.log("change");
+			console.log('change');
 			var route = window.location.hash.slice(2);
 			sections = qwery('section[data-route]');
 
-			console.log("SUBSTRINGING: " + route.substring(0,9));
+			console.log(.SUBSTRINGING: '' + route.substring(0,9));
 			
-			if (route.substring(0,9) == 'scorepage'){
+			if (route.substring(0,9) == 'scorepage')
+			{
 				route = 'scorepage';
-				console.log("ROUTE ROUTE ROUTING: " + route);
+				console.log('ROUTE ROUTE ROUTING: ' + route);
 			}			
 
 			section = qwery('[data-route=' + route + ']')[0];
@@ -177,7 +194,7 @@ var FRISBEE = FRISBEE || {};
 				{
 					href: function(params)
 					{
-						return "#/scorepage/" + this.id;
+						return '#/scorepage/' + this.id;
 					}
 				}
 			};
@@ -201,15 +218,18 @@ var FRISBEE = FRISBEE || {};
 	        	}
 	        }
 
-			// iets met submitscore knop doen zodat dat post wordt uitgevoerd.
-	        var button = qwery(".submitScore")[0];
-            button.addEventListener("click", function() {
-            	this.removeEventListener("click", arguments.callee, false);
+			// Zoek in html naar class submitScore en hang eventlistner eraan
+	        var button = qwery('.submitScore')[0];
+            button.addEventListener('click', function() 
+            {
+            	this.removeEventListener('click', arguments.callee, false);
+            	// bij click roep post methode aan
             	FRISBEE.leaguevineRouter.postScoreData(id);
-            	console.log("POSTBUTTON");
+            	console.log('Post button click');
             });
 
 		},
+		
 		loadRankingPage: function () 
 		{
 			console.log('FRISBEE.page.loadRankingPage');
@@ -221,7 +241,7 @@ var FRISBEE = FRISBEE || {};
 	// Kijken of DOM klaar is
 	domready(function ()
 	{	
-		console.log("dom is klaar");
+		console.log('dom is klaar');
 		// Kickstart de applicatie wanneer alles geladen is = uitvoeren
 		FRISBEE.beginning.init();
 	});
